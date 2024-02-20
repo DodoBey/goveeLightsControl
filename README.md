@@ -11,15 +11,15 @@ Tech Stack
 - Tanstack/react query for a better UX
 - Govee lights API
 
-[x] Install Dependencies
-[x] Boilerplate
-[x] Localstrage utils
-[ ] Tanstack Query setup
-[ ] Govee API setup
-[ ] Ligths page
-[ ] Ligths control cards
-[ ] Deployment on Vercel
-[ ] Future updates when Govee adds more features to their API
+- [x] Install Dependencies
+- [x] Boilerplate
+- [x] Localstrage utils
+- [ ] Tanstack Query setup
+- [ ] Govee API setup
+- [ ] Ligths page
+- [ ] Ligths control cards
+- [ ] Deployment on Vercel
+- [ ] Future updates when Govee adds more features to their API
 
 If you have any question, you can get in touch with me through [Personal Page](https://dogukanyigiter.com/)
 
