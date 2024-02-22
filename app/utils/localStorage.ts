@@ -1,7 +1,6 @@
 export const getApiKey = (itemKey: string) => {
   if (typeof window !== 'undefined') {
     const currAPIkey = localStorage.getItem(itemKey);
-    console.log(currAPIkey);
 
     if (!currAPIkey) {
       return null;

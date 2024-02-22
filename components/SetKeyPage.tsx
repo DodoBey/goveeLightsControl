@@ -12,16 +12,25 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { getApiKey, setApiKey } from '../app/utils/localStorage';
-import { useEffect } from 'react';
 import { redirect } from 'next/navigation';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 const SetKeyPage = () => {
-  useEffect(() => {
-    const userKey = getApiKey('userKey');
-    if (userKey) {
-      redirect('/lights');
-    }
-  }, []);
+  const queryClient = useQueryClient();
+  const { data, isPending } = useQuery({
+    queryKey: ['userKey'],
+    queryFn: () => getApiKey('userKey'),
+  });
+
+  if (isPending) {
+    return (
+      <span className='m-auto text-secondary animate-bounce'>Loading...</span>
+    );
+  }
+
+  if (data) {
+    redirect('/lights');
+  }
 
   const setUsersKey = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,10 +38,10 @@ const SetKeyPage = () => {
     const userData = Object.fromEntries(formData);
     const objectKey = Object.keys(userData)[0];
     const userVal = userData[objectKey] as string;
-
     setApiKey(objectKey, userVal);
-
     e.currentTarget.reset();
+    queryClient.invalidateQueries({ queryKey: ['userKey'] });
+    redirect('/lights');
   };
 
   return (
