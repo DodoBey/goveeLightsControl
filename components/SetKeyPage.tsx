@@ -49,7 +49,7 @@ const SetKeyPage = () => {
       <CardHeader>
         <CardTitle>Set your API Key</CardTitle>
         <CardDescription>
-          You should set your API key to use your own lights.
+          You should set your API key to use the app with your own lights.
           <Button variant='link'>
             <Link
               href={

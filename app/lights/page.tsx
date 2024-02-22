@@ -11,6 +11,8 @@ const Lights = () => {
     queryFn: () => getApiKey('userKey'),
   });
 
+  console.log(data);
+
   if (!data) {
     redirect('/setkey');
   }
