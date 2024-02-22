@@ -42,7 +42,7 @@ const LightCard: FC<LightCardProps> = ({ userKey, device }) => {
         await queryClient.invalidateQueries({
           queryKey: ['device', deviceMac],
         });
-      }, 1000);
+      }, 2000);
     },
   });
 

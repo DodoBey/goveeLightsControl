@@ -21,8 +21,6 @@ const Lights = () => {
     redirect('/setkey');
   }
 
-  console.log(data);
-
   return (
     <div className='flex flex-col items-center h-screen w-full'>
       <LightsPage userKey={data} />
