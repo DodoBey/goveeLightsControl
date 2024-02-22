@@ -14,10 +14,11 @@ Tech Stack
 - [x] Install Dependencies
 - [x] Boilerplate
 - [x] Localstrage utils
-- [ ] Tanstack Query setup
-- [ ] Govee API setup
-- [ ] Ligths page
-- [ ] Ligths control cards
+- [x] Tanstack Query setup
+- [x] Govee API setup
+- [x] Ligths page
+- [x] Ligths control cards
+- [ ] User feedbacks will be added (toast, loaders etc.)
 - [ ] Deployment on Vercel
 - [ ] Future updates when Govee adds more features to their API
 
