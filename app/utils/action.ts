@@ -32,3 +32,31 @@ export const getDeviceState = async (
     console.log(error);
   }
 };
+
+export type CommandType = {
+  name: string;
+  value: string | number | { r: number; g: number; b: number };
+};
+
+export interface BodyType {
+  deviceMac: string;
+  model: string;
+  cmd: CommandType;
+}
+
+export const updateDeviceState = async (apiKey: string, body: BodyType) => {
+  try {
+    const { deviceMac, model, cmd } = body;
+    const response = await fetch(`${url}/control`, {
+      method: 'PUT',
+      headers: {
+        'Govee-API-Key': `${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ device: deviceMac, model, cmd }),
+    });
+    return response.json();
+  } catch (error) {
+    console.log(error);
+  }
+};

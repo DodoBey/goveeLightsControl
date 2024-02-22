@@ -16,7 +16,7 @@ const Lights = () => {
   }
 
   return (
-    <div className='flex justify-center items-center h-screen'>
+    <div className='flex flex-col items-center h-screen w-full'>
       <LightsPage userKey={data} />
     </div>
   );

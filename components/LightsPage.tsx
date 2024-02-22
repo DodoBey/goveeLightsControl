@@ -1,24 +1,36 @@
-import { fetchUserLights, getDeviceState } from '@/app/utils/action';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import type { FC } from 'react';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+'use client';
+
+import { fetchUserLights } from '@/app/utils/action';
+import { useQuery } from '@tanstack/react-query';
+import { type FC } from 'react';
+import LightCard from './common/LightCard';
 
 type LightsPageProps = {
   userKey: string;
 };
 
+type Device = {
+  deviceName: string;
+  device: string;
+  model: string;
+};
+
+export type SingleLight = SingleLightRoot[];
+
+export interface Color {
+  r: number;
+  b: number;
+  g: number;
+}
+
+export interface SingleLightRoot {
+  online?: boolean;
+  powerState?: string;
+  brightness?: number;
+  color?: Color;
+}
+
 const LightsPage: FC<LightsPageProps> = ({ userKey }) => {
-  const queryClient = useQueryClient();
   const { data, isPending } = useQuery({
     queryKey: ['userLights'],
     queryFn: () => fetchUserLights(userKey),
@@ -32,44 +44,25 @@ const LightsPage: FC<LightsPageProps> = ({ userKey }) => {
 
   const devices = data.data.devices;
 
-  const fetchDeviceData = async (
-    userKey: string,
-    deviceMac: string,
-    model: string
-  ) => {
-    const deviceData = await queryClient.fetchQuery({
-      queryKey: [deviceMac],
-      queryFn: () => getDeviceState(userKey, deviceMac, model),
-    });
-    console.log(deviceData);
-  };
-
-  // const lightsData = devices.map((device) => {});
+  const lightsData = devices.map((device: Device) => {
+    return (
+      <LightCard
+        device={device}
+        userKey={userKey}
+        key={device.device}
+      />
+    );
+  });
 
   return (
-    <Card className='w-[350px] dark'>
-      <CardHeader>
-        <CardTitle>Create project</CardTitle>
-        <CardDescription>Deploy your new project in one-click.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form>
-          <div className='grid w-full items-center gap-4'>
-            <div className='flex flex-col space-y-1.5'>
-              <Label htmlFor='name'>Name</Label>
-              <Input
-                id='name'
-                placeholder='Name of your project'
-              />
-            </div>
-          </div>
-        </form>
-      </CardContent>
-      <CardFooter className='flex justify-between'>
-        <Button variant='outline'>Cancel</Button>
-        <Button>Deploy</Button>
-      </CardFooter>
-    </Card>
+    <>
+      <h1 className='text-secondary text-3xl font-bold my-4'>
+        Supported Lights
+      </h1>
+      <div className='flex flex-col sm:grid sm:grid-cols-4 gap-4 dark'>
+        {lightsData}
+      </div>
+    </>
   );
 };
 export default LightsPage;
