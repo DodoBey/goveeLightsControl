@@ -1,6 +1,8 @@
+'use client';
+
 import SetKeyPage from '../../components/SetKeyPage';
 
-const SetKey = async () => {
+const SetKey = () => {
   return (
     <div className='flex justify-center items-center h-screen'>
       <SetKeyPage />
