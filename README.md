@@ -1,4 +1,4 @@
-# Govee Lights Controll App
+# Govee Lights Control App
 
 This is a web app to control my Govee brand home office light setup. Due to some limitations on Govee's API, I'll be only able to turn on/off the lights and change the brightness and the colors but it's enough for daily usage. I'll be deploying the APP when it's completed.
 
@@ -25,3 +25,9 @@ Tech Stack
 If you have any question, you can get in touch with me through [Personal Page](https://dogukanyigiter.com/)
 
 Thank you!
+
+
+## v01 - Test before some UI implementations
+
+https://github.com/DodoBey/goveeLightsControl/assets/77416196/5e652d0a-e6ea-42ce-a9df-7a57ec80f6c5
+
