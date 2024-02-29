@@ -8,11 +8,12 @@ import {
   type BodyType,
   type CommandType,
 } from '@/app/utils/action';
-import { useState, type FC } from 'react';
+import { type FC } from 'react';
 import CustomColorPicker from './CustomColorPicker';
 import { rgbFormatter } from '@/app/utils/rgbFormatter';
 import CustomSlider from './CustomSlider';
 import CustomSwitch from './CustomSwitch';
+import { useToast } from '@/components/ui/use-toast';
 
 type LightCardProps = {
   userKey: string;
@@ -25,6 +26,7 @@ type LightCardProps = {
 
 const LightCard: FC<LightCardProps> = ({ userKey, device }) => {
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   const { device: deviceMac, model } = device;
 
@@ -38,11 +40,12 @@ const LightCard: FC<LightCardProps> = ({ userKey, device }) => {
       return await updateDeviceState(userKey, body);
     },
     onSuccess: () => {
+      toast.toast({ description: 'Device status has updated' });
       setTimeout(async () => {
         await queryClient.invalidateQueries({
           queryKey: ['device', deviceMac],
         });
-      }, 2000);
+      }, 1000);
     },
   });
 
@@ -53,7 +56,8 @@ const LightCard: FC<LightCardProps> = ({ userKey, device }) => {
   }
   const properties = data.data.properties;
 
-  const rgbDefault: string = rgbFormatter(properties[3].color);
+  const rgbDefault: string =
+    properties[3].color && rgbFormatter(properties[3].color);
   const currentBrightness = properties[2].brightness;
   const currentStatus = properties[1].powerState;
 
@@ -78,7 +82,7 @@ const LightCard: FC<LightCardProps> = ({ userKey, device }) => {
             onUpdate={onMutateHandler}
           />
         )}
-        {currentStatus === 'on' && (
+        {currentStatus === 'on' && properties[3].color && (
           <CustomColorPicker
             initialValue={rgbDefault}
             onUpdate={onMutateHandler}
