@@ -65,7 +65,6 @@ const LightCard: FC<LightCardProps> = ({ userKey, device }) => {
       return await updateDeviceState(userKey, body);
     },
     onSuccess: () => {
-      toast.toast({ description: 'Device status has updated' });
       setTimeout(async () => {
         await queryClient.invalidateQueries({
           queryKey: ['device', deviceMac],
@@ -79,6 +78,7 @@ const LightCard: FC<LightCardProps> = ({ userKey, device }) => {
         {
           variables?.cmd.name === 'turn' && setPowerSwitchLoader(false);
         }
+        toast.toast({ description: 'Device status updated' });
       }, 2000);
     },
     onError: () => {
