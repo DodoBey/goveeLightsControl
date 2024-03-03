@@ -3,15 +3,18 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { useMemo, useState, type FC } from 'react';
+import { Loader2 } from 'lucide-react';
 
 type CustomSliderProps = {
   currentBrightness: number;
   onUpdate: (cmd: CommandType) => void;
+  isLoading: boolean;
 };
 
 const CustomSlider: FC<CustomSliderProps> = ({
   currentBrightness,
   onUpdate,
+  isLoading,
 }) => {
   const [brightness, setBrightness] = useState(currentBrightness);
   const [buttonIsDisabled, setButtonIsDisable] = useState(true);
@@ -50,7 +53,8 @@ const CustomSlider: FC<CustomSliderProps> = ({
           disabled={buttonIsDisabled}
           onClick={updateHandler}
         >
-          Update Brightness
+          {isLoading ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : null}
+          {isLoading ? 'Updating the Brightness' : 'Update Brightness'}
         </Button>
       </div>
     </>
