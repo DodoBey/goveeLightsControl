@@ -8,7 +8,7 @@ import {
   type BodyType,
   type CommandType,
 } from '@/app/utils/action';
-import { type FC } from 'react';
+import { useState, type FC } from 'react';
 import CustomColorPicker from './CustomColorPicker';
 import { rgbFormatter } from '@/app/utils/rgbFormatter';
 import CustomSlider from './CustomSlider';
@@ -21,21 +21,46 @@ type LightCardProps = {
     device: string;
     model: string;
     deviceName: string;
+    supportCmds: string[];
   };
+};
+
+const initialState = {
+  powerSwitchLoader: false,
+  colorLoader: false,
+  brightnesLoader: false,
 };
 
 const LightCard: FC<LightCardProps> = ({ userKey, device }) => {
   const queryClient = useQueryClient();
   const toast = useToast();
+  const [powerSwitchLoader, setPowerSwitchLoader] = useState(false);
+  const [colorLoader, setColorLoader] = useState(false);
+  const [brightnesLoader, setBrightnesLoader] = useState(false);
 
-  const { device: deviceMac, model } = device;
+  const loaderHandler = (command: string) => {
+    if (command === 'brightness') {
+      setBrightnesLoader(true);
+      return;
+    }
+    if (command === 'color') {
+      setColorLoader(true);
+      return;
+    }
+    if (command === 'turn') {
+      setPowerSwitchLoader(true);
+      return;
+    }
+  };
+
+  const { device: deviceMac, model, supportCmds } = device;
 
   const { data, isPending } = useQuery({
     queryKey: ['device', deviceMac],
     queryFn: () => getDeviceState(userKey, deviceMac, model),
   });
 
-  const { mutate } = useMutation({
+  const { mutate, variables } = useMutation({
     mutationFn: async (body: BodyType) => {
       return await updateDeviceState(userKey, body);
     },
@@ -45,7 +70,19 @@ const LightCard: FC<LightCardProps> = ({ userKey, device }) => {
         await queryClient.invalidateQueries({
           queryKey: ['device', deviceMac],
         });
-      }, 1000);
+        {
+          variables?.cmd.name === 'brightness' && setBrightnesLoader(false);
+        }
+        {
+          variables?.cmd.name === 'color' && setColorLoader(false);
+        }
+        {
+          variables?.cmd.name === 'turn' && setPowerSwitchLoader(false);
+        }
+      }, 2000);
+    },
+    onError: () => {
+      toast.toast({ description: 'Something went wrong.' });
     },
   });
 
@@ -57,11 +94,15 @@ const LightCard: FC<LightCardProps> = ({ userKey, device }) => {
   const properties = data.data.properties;
 
   const rgbDefault: string =
-    properties[3].color && rgbFormatter(properties[3].color);
-  const currentBrightness = properties[2].brightness;
+    supportCmds.includes('color') &&
+    properties[3].color &&
+    rgbFormatter(properties[3].color);
+  const currentBrightness: number =
+    supportCmds.includes('brightness') && properties[2].brightness;
   const currentStatus = properties[1].powerState;
 
   const onMutateHandler = (cmd: CommandType) => {
+    loaderHandler(cmd.name);
     const body = { deviceMac, model, cmd };
     mutate(body);
   };
@@ -75,17 +116,20 @@ const LightCard: FC<LightCardProps> = ({ userKey, device }) => {
         <CustomSwitch
           currentStatus={currentStatus}
           onSwitch={onMutateHandler}
+          isLoading={powerSwitchLoader}
         />
-        {currentStatus === 'on' && (
+        {currentStatus === 'on' && supportCmds.includes('brightness') && (
           <CustomSlider
             currentBrightness={currentBrightness}
             onUpdate={onMutateHandler}
+            isLoading={brightnesLoader}
           />
         )}
-        {currentStatus === 'on' && properties[3].color && (
+        {currentStatus === 'on' && supportCmds.includes('color') && (
           <CustomColorPicker
             initialValue={rgbDefault}
             onUpdate={onMutateHandler}
+            isLoading={colorLoader}
           />
         )}
       </CardContent>

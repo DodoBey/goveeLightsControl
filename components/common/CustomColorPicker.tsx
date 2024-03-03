@@ -5,15 +5,18 @@ import { Hue, Saturation, useColor } from 'react-color-palette';
 import 'react-color-palette/css';
 import { rgbFormatter } from '@/app/utils/rgbFormatter';
 import type { CommandType } from '@/app/utils/action';
+import { Loader2 } from 'lucide-react';
 
 type CustomColorPicker = {
   initialValue: string;
   onUpdate: (cmd: CommandType) => void;
+  isLoading: boolean;
 };
 
 const CustomColorPicker: FC<CustomColorPicker> = ({
   initialValue,
   onUpdate,
+  isLoading,
 }) => {
   const [color, setColor] = useColor(initialValue);
   const [buttonIsDisabled, setButtonIsDisable] = useState(true);
@@ -52,7 +55,8 @@ const CustomColorPicker: FC<CustomColorPicker> = ({
         disabled={buttonIsDisabled}
         onClick={updateHandler}
       >
-        Update Color
+        {isLoading ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : null}
+        {isLoading ? 'Updating the Color' : 'Update Color'}
       </Button>
     </div>
   );

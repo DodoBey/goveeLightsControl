@@ -10,7 +10,13 @@ type ProviderProps = {
 };
 
 const Providers: FC<ProviderProps> = ({ children }) => {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 60 * 60 * 1000,
+      },
+    },
+  });
 
   return (
     <QueryClientProvider client={queryClient}>

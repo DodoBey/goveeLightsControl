@@ -13,6 +13,7 @@ type Device = {
   deviceName: string;
   device: string;
   model: string;
+  supportCmds: string[];
 };
 
 export type SingleLight = SingleLightRoot[];
