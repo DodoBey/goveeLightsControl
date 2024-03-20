@@ -19,7 +19,7 @@ Tech Stack
 - [x] Ligths page
 - [x] Ligths control cards
 - [x] Deployment on Vercel
-- [ ] User feedbacks will be added (toast, loaders etc.)
+- [x] User feedbacks will be added (toast, loaders etc.)
 - [ ] Future updates when Govee adds more features to their API
 
 If you have any question, you can get in touch with me through [Personal Page](https://dogukanyigiter.com/)
