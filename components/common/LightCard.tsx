@@ -125,13 +125,15 @@ const LightCard: FC<LightCardProps> = ({ userKey, device }) => {
             isLoading={brightnesLoader}
           />
         )}
-        {currentStatus === 'on' && supportCmds.includes('color') && (
-          <CustomColorPicker
-            initialValue={rgbDefault}
-            onUpdate={onMutateHandler}
-            isLoading={colorLoader}
-          />
-        )}
+        {currentStatus === 'on' &&
+          supportCmds.includes('color') &&
+          properties[3].color && (
+            <CustomColorPicker
+              initialValue={rgbDefault}
+              onUpdate={onMutateHandler}
+              isLoading={colorLoader}
+            />
+          )}
       </CardContent>
     </Card>
   );
